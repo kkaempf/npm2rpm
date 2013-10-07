@@ -61,6 +61,16 @@ module Npm2Rpm
   
     def package= name
       @package, @version = name.split "@"
+      case @version.split(".").size
+      when 1
+        @version << ".0.0"
+      when 2
+        @version << ".0"
+      when 3
+        # ok
+      else
+        raise "Not a semantic version #{@version.inspect}"  
+      end if @version
     end
   end
 
