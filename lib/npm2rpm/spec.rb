@@ -59,13 +59,13 @@ module Npm2Rpm
       @metadata.version
     end
     def licenses
-      [ @metadata.license ]
+      [ @metadata.license.nil? ? "Unknown" : @metadata.license ]
     end
     def summary
-      @metadata.summary
+      @metadata.npmdata["description"]
     end
     def description
-      @metadata.description
+      @metadata.npmdata["description"]
     end
     def homepage
       @metadata.npmdata["homepage"] || @metadata.tarball || abort('FIXME: No homepage found')
@@ -77,9 +77,11 @@ module Npm2Rpm
     def dir
       # Find out the top-level directory from tarball
       # The upstreams often use very weird ones
-      [`tar tzf #{@local_source}` =~ /([^\/]+)/][0]
+      `tar tzf #{@local_source}` =~ /([^\/]+)/
+      $1
     end
     def binfiles
+      @metadata.npmdata["bin"]
     end
     def requires
       req = dependencies(@metadata.npmdata["dependencies"])
