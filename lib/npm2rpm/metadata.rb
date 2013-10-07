@@ -136,7 +136,7 @@ module Npm2Rpm
       @metadata = JSON.parse json
       @version = version || @metadata["dist-tags"]["latest"] || abort("Can't determine version")
       puts "#{name}-#{@version}"
-      @npmdata = @metadata["versions"][@version] || abort("Bad version ? #{@version.inspect}")
+      @npmdata = @metadata["versions"][@version] || abort("No such version: #{@version.inspect}")
       @name = @metadata["name"]
       abort("Name mismatch, want #{name.inspect}, got #{@name.inspect}") unless name == @name
     end
