@@ -48,6 +48,9 @@ Provides:       npm(<%= spec.npmname -%>) = <%= spec.version %>
 Provides:       npm(<%= spec.npmname -%>@<%= spec.version %>)
 
 BuildRequires:  nodejs-npm
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+
 Requires:  nodejs-npm
 
 %if 0%{?suse_version} > 1110
