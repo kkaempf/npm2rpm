@@ -9,13 +9,14 @@ module Npm2Rpm
 
     def write
       File.open("#{@name}-rpmlintrc", "w+") do |f|
-        f.puts "addFilter("devel-file-in-non-devel-package .*")
-        f.puts "addFilter("file-contains-buildroot .*")
-        f.puts "addFilter("file-contains-date-and-time .*")
-        f.puts "addFilter("hidden-file-or-dir .*")
-        f.puts "addFilter("incorrect-fsf-address .*")
-        f.puts "addFilter("non-executable-script .*")
-#        f.puts "addFilter(" .*")        
+        f.puts "addFilter(\"devel-file-in-non-devel-package .*\")"
+        f.puts "addFilter(\"file-contains-buildroot .*\")"
+        f.puts "addFilter(\"file-contains-date-and-time .*\")"
+        f.puts "addFilter(\"hidden-file-or-dir .*\")"
+        f.puts "addFilter(\"incorrect-fsf-address .*\")"
+        f.puts "addFilter(\"non-executable-script .*\")"
+        f.puts "addFilter(\"backup-file-in-package .*\")"        
+#        f.puts "addFilter(\" .*\")"        
       end
     end
   end
