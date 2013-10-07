@@ -16,6 +16,7 @@ module Npm2Rpm
         f.puts "addFilter(\"incorrect-fsf-address .*\")"
         f.puts "addFilter(\"non-executable-script .*\")"
         f.puts "addFilter(\"backup-file-in-package .*\")"        
+        f.puts "addFilter(\"suse-filelist-forbidden-backup-file .*\")"        
 #        f.puts "addFilter(\" .*\")"        
       end
     end
