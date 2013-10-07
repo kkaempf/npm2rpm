@@ -1,29 +1,95 @@
-require 'erb'
-class Spec
-  attr_reader :name
-  def initialize metadata
-    @metadata = metadata
-    @name = "nodejs-#{@metadata.name}_#{metadata.version}"
-    puts "Package #{@name}"
-  end
+#
+# lib/npm2rpm/spec.rb
+#
+# Container for .spec related information
+#
 
-  def write
-    begin
-      Dir.mkdir @name
-    rescue Errno::EEXIST
+module Npm2Rpm
+  class Spec
+    attr_reader :name
+    private
+    # Convert Hash of npmjs dependencies to Array of RPM requires
+    # input:
+    #   { "grunt-contrib-nodeunit": "~0.1.0", "grunt-contrib-internal": "~0.1.0", "grunt": "~0.4.0" }
+    # output
+    #   [ "npm(grunt-contrib-nodeunit@0.1.0", npm(grunt-contrib-internal@0.1.0), "npm(grunt@0.4.0) }
+    def dependencies deps
+      result = Array.new
+      deps ||= Hash.new
+      deps.each do |name, version|
+        case version
+        when /~(.*)/
+          result << "npm(#{name}@#{$1})"
+        else
+          raise "Unrecognized dependency #{name.inspect}: #{version.inspect}"
+        end
+      end
+      result
     end
-    Dir.chdir @name
+    public
+    def initialize metadata
+      @metadata = metadata
+      @name = "nodejs-#{@metadata.name}_#{@metadata.version}"
+    end
 
-    File.open("#{@name}.spec", "w+") do |f|
-      source = @metadata.download
-      homepage = @metadata.homepage
-
+    def npmname
+      @metadata.name
+    end
+    def version
+      @metadata.version
+    end
+    def licenses
+      [ @metadata.license ]
+    end
+    def summary
+      @metadata.summary
+    end
+    def description
+      @metadata.description
+    end
+    def homepage
+      @metadata.npmdata["homepage"] || @metadata.tarball || abort('FIXME: No homepage found')
+    end
+    
+    def source
+      @metadata.tarball
+    end
+    def dir
       # Find out the top-level directory from tarball
       # The upstreams often use very weird ones
-      toplevel = [`tar tzf #{source}` =~ /([^\/]+)/][0]
+      [`tar tzf #{@local_source}` =~ /([^\/]+)/][0]
+    end
+    def binfiles
+    end
+    def requires
+      dependencies @metadata.npmdata["dependencies"]
+    end
+    def build_requires
+      dependencies @metadata.npmdata["devDependencies"]
+    end
 
-      # spec-write
+    def write
+      begin
+        Dir.mkdir @name
+      rescue Errno::EEXIST
+      end
+      Dir.chdir @name
+
+      url = @metadata.tarball
+      puts "pulling #{url.inspect}"
+      @local_source = Download.new(url).save.filename
+
+      require 'erb'
+
+      template_name = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "templates", "nodejs-opensuse.spec.erb"))
+      template = File.read(template_name)
+      # -:  omit blank lines ending in -%>
+      erb = ERB.new(template, nil, "-")
+      File.open("#{@name}.spec", "w+") do |f|
+        spec = self
+        f.puts erb.result
+      end
     end
   end
-end
 
+end
