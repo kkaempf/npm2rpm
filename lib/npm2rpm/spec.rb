@@ -62,7 +62,9 @@ module Npm2Rpm
     def binfiles
     end
     def requires
-      dependencies @metadata.npmdata["dependencies"]
+      req = dependencies(@metadata.npmdata["dependencies"])
+      req += dependencies(@metadata.npmdata["peerDependencies"])
+      req.uniq
     end
     def build_requires
       dependencies @metadata.npmdata["devDependencies"]
