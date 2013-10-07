@@ -55,8 +55,14 @@ Requires:  nodejs-npm
 BuildRequires:  fdupes
 %endif
 
-<% for d in spec.runtime_dependencies -%>
+<% spec.build_requires.each do |d| -%>
+BuildRequires: <%= d %>
 <% end -%>
+
+<% spec.requires.each do |d| -%>
+Requires: <%= d %>
+<% end -%>
+
 
 %description
 <%= spec.description -%>
