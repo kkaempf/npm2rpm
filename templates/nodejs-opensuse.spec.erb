@@ -61,7 +61,7 @@ BuildRequires:  fdupes
 %endif
 
 <% spec.build_requires.each do |d| -%>
-BuildRequires: <%= d %>
+# cyclic? BuildRequires: <%= d %>
 <% end -%>
 
 <% spec.requires.each do |d| -%>
