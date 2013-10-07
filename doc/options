@@ -1,0 +1,77 @@
+=head1 OPTIONS
+
+=over
+
+=item B<--specdir> B<< <specdir> >>
+
+Where to write the resulting SPEC file to.
+Defaults to B<%_specdir> RPM macro, which is usually
+~/rpmbuild/SPECS (or /usr/src/redhat/SPECS on ancient
+RPM versions).
+
+=item B<--sourcedir> B<< <sourcedir> >>
+
+Where to download the upstream distribution tarball to.
+Defaults to B<%_sourcedir> RPM macro, which is usually
+~/rpmbuild/SOURCES (or /usr/src/redhat/SOURCES on ancient
+RPM versions).
+
+=item B<--date> B<< <date> >>
+
+Date to use for initial changelog entry (e.g. Mon Dec 20 2010).
+Defaults to output of C<date +'%a %b %d %Y'>.
+
+=item B<--user> B<< <user> >>
+
+Name (in "Firstname Lastname") format to use for initial
+changelog entry. Defaults to your account's real name.
+
+=item B<--email> B<< <email> >>
+
+E-mail address to use in initial changelog entry.
+Defaults to your login.
+
+=item [B<--package>] B<< <package> >>
+
+The NPM package name to act upon. Mandatory.
+
+=item B<-h>, B<--help>
+
+Prints and error message and exits
+
+=item B<-H>, B<--manual>
+
+Show the complete manual page and exit.
+
+=back
+
+=head1 BUGS
+
+The resulting package is ugly as hell -- due the way NPM currently
+works the whole npm tree has to be copied for unprivileged build,
+which is inefficient.
+
+NPM packages sometimes lack pieces of metadata this tool uses;
+you may see "uninitialized" warnings from perl, as well as empty
+or "FIXME" tags in the resulting SPEC file.
+
+While for simple packages and good configuration the package can
+be used as it is, the weirder package is the higher are chances
+you'll have to hand-edit it.
+
+=head1 EXAMPLES
+
+=over 4
+
+=item C<npm2rpm jsdom>
+
+Well, nothing particularly sophisticated.
+
+=back
+
+=head1 SEE ALSO
+
+L<cpanspec>, L<https://fedoraproject.org/wiki/User:Lkundrak/NodeJS>
+
+
+=cut
