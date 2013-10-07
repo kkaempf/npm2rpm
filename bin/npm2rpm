@@ -15,11 +15,13 @@ $:.push(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'npm2rpm'
 
-metadata = Metadata.new options.package, options.version
+options = Npm2Rpm::Options.new
 
-spec = Spec.new(metadata)
+metadata = Npm2Rpm::Metadata.new options.package, options.version
+
+spec = Npm2Rpm::Spec.new(metadata)
 spec.write
-Changelog.new(spec.name, metadata, options).write
+Npm2Rpm::Changes.new(spec.name, metadata, options).write
 
 puts "Done. Now do this:";
 puts "osc add #{spec.name}";
