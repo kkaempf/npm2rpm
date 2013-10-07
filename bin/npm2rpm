@@ -22,6 +22,7 @@ metadata = Npm2Rpm::Metadata.new options.package, options.version
 spec = Npm2Rpm::Spec.new(metadata)
 spec.write
 Npm2Rpm::Changes.new(spec.name, metadata, options).write
+Npm2Rpm::Rpmlintc.new(spec.name, metadata, options).write
 
 puts "Done. Now do this:";
 puts "osc add #{spec.name}";
