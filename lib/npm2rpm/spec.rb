@@ -18,8 +18,28 @@ module Npm2Rpm
       deps ||= Hash.new
       deps.each do |name, version|
         case version
-        when /~(.*)/
+        # "~1.2.3"
+        when /^~?([\d\.]+)$/
           result << "npm(#{name}@#{$1})"
+        # "1.2.0-1.2.3"
+        when /^([\d\.]+)-([\d\.]+)$/
+          result << "npm(#{name}@#{$2})"
+        # "1.2.x"
+        when /^([\d\.]+)\.x$/
+          loop do
+            v = $1
+            next if v =~ /([\d\.]+)\.x/
+            result << "npm(#{name}) > #{v}"
+            break
+          end
+        # ">= 1.0.0 < 1.2.0"
+        when /^\>=?\s+([\d\.]+)\s+\<\s+([\d\.]+)$/
+          result << "npm(#{name}) >= #{$1}"
+          result << "npm(#{name}) < #{$2}"
+        # "*"
+        # ""
+        when "*", ""
+          result << "npm(#{name})"
         else
           raise "Unrecognized dependency #{name.inspect}: #{version.inspect}"
         end
