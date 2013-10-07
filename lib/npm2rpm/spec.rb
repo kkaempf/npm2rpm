@@ -24,8 +24,8 @@ module Npm2Rpm
         # "1.2.0-1.2.3"
         when /^([\d\.]+)-([\d\.]+)$/
           result << "npm(#{name}@#{$2})"
-        # "1.2.x"
-        when /^~?([^x]+)(\.x)(.*)$/
+        # "1.2.x", "=0.7.x"
+        when /^~?<?>?=?([^xY]+)(\.[xX])(.*)$/
           result << "npm(#{name}) > #{$1}"
         # ">= 1.0.0 < 1.2.0"
         when /^\>=?\s*([\d\.]+)(\s+\<\s*([\d\.]+))?$/
@@ -77,6 +77,16 @@ module Npm2Rpm
     end
     def binfiles
       @metadata.npmdata["bin"]
+    end
+    def provides
+      prv = Array.new
+      prv << "npm(#{self.npmname}) = %{version}"
+      v = self.version.split "."
+      until v.empty? do
+        prv << "npm(#{self.npmname}@#{v.join('.')})"
+        v.pop
+      end
+      prv
     end
     def requires
       req = dependencies(@metadata.npmdata["dependencies"])

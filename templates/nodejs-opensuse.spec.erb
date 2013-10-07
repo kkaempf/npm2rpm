@@ -46,8 +46,9 @@ License:        CHECK(Nodejs)
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
-Provides:       npm(<%= spec.npmname -%>) = <%= spec.version %>
-Provides:       npm(<%= spec.npmname -%>@<%= spec.version %>)
+<% spec.provides.each do |d| -%>
+Provides: <%= d %>
+<% end -%>
 
 BuildRequires:  nodejs-npm
 BuildRequires:  gcc
