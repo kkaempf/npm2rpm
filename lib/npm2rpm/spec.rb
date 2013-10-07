@@ -19,7 +19,7 @@ module Npm2Rpm
       deps.each do |name, version|
         case version
         # "~1.2.3"
-        when /^~?([\d\.]+)$/
+        when /^~?([\d\.]+)(-\d|rc)?$/
           result << "npm(#{name}@#{$1})"
         # "1.2.0-1.2.3"
         when /^([\d\.]+)-([\d\.]+)$/
