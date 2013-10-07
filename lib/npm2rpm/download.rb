@@ -27,7 +27,13 @@ module Npm2Rpm
         http.cert_store = store
       end
       response = http.request(Net::HTTP::Get.new(@uri.request_uri))
-      raise "#{url} failed with #{response.code}" unless response.code.to_i == 200
+      case response.code.to_i
+      when 200
+      when 404
+        abort "No such NPM module #{url}"
+      else
+        abort "HTTP error #{response.code.inspect}"
+      end
       @content = response.body
     end
     def save
