@@ -25,13 +25,8 @@ module Npm2Rpm
         when /^([\d\.]+)-([\d\.]+)$/
           result << "npm(#{name}@#{$2})"
         # "1.2.x"
-        when /^([\d\.]+)\.x$/
-          loop do
-            v = $1
-            next if v =~ /([\d\.]+)\.x/
-            result << "npm(#{name}) > #{v}"
-            break
-          end
+        when /^~?([^x]+)(\.x)(.*)$/
+          result << "npm(#{name}) > #{$1}"
         # ">= 1.0.0 < 1.2.0"
         when /^\>=?\s*([\d\.]+)(\s+\<\s*([\d\.]+))?$/
           result << "npm(#{name}) >= #{$1}"
