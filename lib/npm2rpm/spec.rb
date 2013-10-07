@@ -33,9 +33,9 @@ module Npm2Rpm
             break
           end
         # ">= 1.0.0 < 1.2.0"
-        when /^\>=?\s+([\d\.]+)\s+\<\s+([\d\.]+)$/
+        when /^\>=?\s*([\d\.]+)(\s+\<\s*([\d\.]+))?$/
           result << "npm(#{name}) >= #{$1}"
-          result << "npm(#{name}) < #{$2}"
+          result << "npm(#{name}) < #{$3}" if $2
         # "*"
         # ""
         when "*", ""
