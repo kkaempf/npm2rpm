@@ -60,14 +60,17 @@ Requires:  nodejs-npm
 BuildRequires:  fdupes
 %endif
 
-<% spec.build_requires.each do |d| -%>
+<% spec.build_requires.uniq.sort.each do |d| -%>
 # cyclic? BuildRequires: <%= d %>
 <% end -%>
 
-<% spec.requires.each do |d| -%>
-Requires: <%= d %>
+<% spec.requires.uniq.sort.each do |d| -%>
+BuildRequires: <%= d %>
 <% end -%>
 
+<% spec.requires.uniq.sort.each do |d| -%>
+Requires: <%= d %>
+<% end -%>
 
 %description
 <%= spec.description -%>
