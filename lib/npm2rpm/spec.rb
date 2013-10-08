@@ -91,21 +91,14 @@ module Npm2Rpm
     def requires
       req = dependencies(@metadata.npmdata["dependencies"])
       req += dependencies(@metadata.npmdata["peerDependencies"])
-      req.uniq
+      req
     end
     def build_requires
       dependencies @metadata.npmdata["devDependencies"]
     end
 
     def write
-      begin
-        Dir.mkdir @name
-      rescue Errno::EEXIST
-      end
-      Dir.chdir @name
-
       url = @metadata.tarball
-      puts "pulling #{url.inspect}"
       @local_source = Download.new(url).save.filename
 
       require 'erb'
