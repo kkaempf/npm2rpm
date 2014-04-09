@@ -142,7 +142,11 @@ module Npm2Rpm
     end
     
     def tarball
-      url = @npmdata["dist"]["tarball"]
+      @npmdata["dist"]["tarball"]
+    end
+
+    def licenses
+      @npmdata['licenses']
     end
     
     def method_missing name, *args
