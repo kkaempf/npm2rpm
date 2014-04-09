@@ -19,7 +19,7 @@ module Npm2Rpm
       deps.each do |name, version|
         case version
         # "~1.2.3"
-        when /^~?([\d\.]+)(-\d|rc)?$/
+        when /^~?([\d\.]+)(-\d)?([a-z]+)?$/
           result << "npm(#{name}@#{$1})"
         # "1.2.0-1.2.3"
         when /^([\d\.]+)-([\d\.]+)$/
@@ -35,6 +35,8 @@ module Npm2Rpm
         # ""
         when "*", ""
           result << "npm(#{name})"
+        when /\w+/
+          result << "npm(#{name}@#{version})"
         else
           raise "Unrecognized dependency #{name.inspect}: #{version.inspect}"
         end

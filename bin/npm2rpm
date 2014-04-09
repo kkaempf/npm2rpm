@@ -20,9 +20,21 @@ options = Npm2Rpm::Options.new
 metadata = Npm2Rpm::Metadata.new options.package, options.version
 
 spec = Npm2Rpm::Spec.new(metadata)
+
+begin
+  Dir.mkdir spec.name
+rescue Errno::EEXIST
+end
+Dir.chdir spec.name
+
 spec.write
 Npm2Rpm::Changes.new(spec.name, metadata, options).write
 Npm2Rpm::Rpmlintrc.new(spec.name, metadata, options).write
 
-puts "Done. Now do this:";
-puts "osc add #{spec.name}";
+Dir.chdir ".."
+
+Kernel.system "osc add #{spec.name}"
+
+Dir.chdir spec.name
+Kernel.system "osc ci"
+Dir.chdir ".."
