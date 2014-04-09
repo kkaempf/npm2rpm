@@ -56,7 +56,13 @@ module Npm2Rpm
       @metadata.version
     end
     def licenses
-      [ @metadata.license.nil? ? "Unknown" : @metadata.license ]
+      if @metadata.licenses.nil?
+        [ "Unknown" ]
+      else
+        @metadata.licenses.map do |l|
+          l['type']
+        end
+      end
     end
     def summary
       @metadata.npmdata["description"]
