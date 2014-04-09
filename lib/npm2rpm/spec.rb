@@ -111,7 +111,7 @@ module Npm2Rpm
       erb = ERB.new(template, nil, "-")
       File.open("#{@name}.spec", "w+") do |f|
         spec = self
-        f.puts erb.result
+        f.puts(erb.result(binding()))
       end
     end
   end
