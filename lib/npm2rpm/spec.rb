@@ -89,15 +89,24 @@ module Npm2Rpm
     def binfiles
       @metadata.npmdata["bin"]
     end
-    def provides
+    # helper for provides
+    def _provides version
       prv = Array.new
-      prv << "npm(#{self.npmname}) = %{version}"
-      v = self.srcversion.split "."
+      v = version.split "."
       until v.empty? do
         prv << "npm(#{self.npmname}@#{v.join('.')})"
         v.pop
       end
       prv
+    end
+    def provides
+      prv = Array.new
+      prv << "npm(#{self.npmname}) = %{version}"
+      minversion, maxversion = self.srcversion.split "-"
+      if maxversion
+        prv.concat( _provides maxversion )
+      end
+      prv.concat( _provides minversion ).uniq
     end
     def requires
       req = dependencies(@metadata.npmdata["dependencies"])
