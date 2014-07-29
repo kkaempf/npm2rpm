@@ -98,7 +98,7 @@ mkdir -p %{buildroot}%{_libdir}/node_modules
 npm_config_prefix=%{buildroot}%{_prefix} \
 npm_config_binroot=%{buildroot}%{_bindir} \
 npm_config_manroot=%{buildroot}%{_mandir} \
-npm install --no-registry --global --production %{S:0}
+npm install --no-registry --cache-min 999999999 --global --production %{S:0}
 
 %if %{_lib} != lib
 mv %{buildroot}%{_prefix}/lib/node_modules/%{npmname} %{buildroot}%{_libdir}/node_modules
