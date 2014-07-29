@@ -98,7 +98,7 @@ mkdir -p %{buildroot}%{_prefix}/lib/node_modules
 npm_config_prefix=%{buildroot}%{_prefix} \
 npm_config_binroot=%{buildroot}%{_bindir} \
 npm_config_manroot=%{buildroot}%{_mandir} \
-npm install --cache-min 999999999 --global --production %{S:0}
+npm install --no-registry --cache-min 999999999 --global --production %{S:0}
 
 <% (spec.binfiles||{}).each do |name, target| -%>
 rm -f %{buildroot}%{_bindir}/<%= name %>

@@ -2,5 +2,5 @@
 # npm2rpm/lib/npm2rpm/version.rb
 #
 module Npm2Rpm
-  VERSION = "0.1.6"
+  VERSION = "0.1.7"
 end
