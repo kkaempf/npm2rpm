@@ -25,7 +25,7 @@
 %global __find_requires /bin/sh -c 'sed -n "s,.*/dependson/\\([^@\\/]*\\)@\\([^@/]\\.[^@/]*\\)\$,nodejs(\\1) = \\2,p" |sort |uniq'
 
 Name:           <%= spec.name %>
-Version:        <%= spec.version %>
+Version:        <%= spec.pkgversion %>
 Release:        0
 
 %if 0%{?suse_version}

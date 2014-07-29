@@ -15,7 +15,11 @@ module Npm2Rpm
         f.puts "-------------------------------------------------------------------"
         f.puts "#{@options.date} - #{@options.email}@suse.com"
         f.puts
-        f.puts "- Initial version #{@metadata.version}"
+        if (@metadata.pkgversion == @metadata.srcversion)
+          f.puts "- Initial version #{@metadata.pkgversion}"
+        else
+          f.puts "- Initial version #{@metadata.pkgversion} (upstream #{@metadata.srcversion})"
+        end
       end
     end
   end

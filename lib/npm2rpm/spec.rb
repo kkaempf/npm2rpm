@@ -46,14 +46,17 @@ module Npm2Rpm
     public
     def initialize metadata
       @metadata = metadata
-      @name = "nodejs-#{@metadata.name}_#{@metadata.version}"
+      @name = "nodejs-#{@metadata.name}_#{@metadata.pkgversion}"
     end
 
     def npmname
       @metadata.name
     end
-    def version
-      @metadata.version
+    def pkgversion
+      @metadata.pkgversion
+    end
+    def srcversion
+      @metadata.srcversion
     end
     def licenses
       if @metadata.licenses.nil?
@@ -89,7 +92,7 @@ module Npm2Rpm
     def provides
       prv = Array.new
       prv << "npm(#{self.npmname}) = %{version}"
-      v = self.version.split "."
+      v = self.srcversion.split "."
       until v.empty? do
         prv << "npm(#{self.npmname}@#{v.join('.')})"
         v.pop

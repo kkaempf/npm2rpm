@@ -124,7 +124,7 @@ module Npm2Rpm
 
   class Metadata
     # npmdata is version-specific information
-    attr_reader :name, :version, :npmdata    
+    attr_reader :name, :npmdata    
     def initialize name, version = nil
       # Get details from central NPM repository
       # FIXME: Server returns... not quite JSON.
@@ -148,8 +148,17 @@ module Npm2Rpm
     def licenses
       @npmdata['licenses']
     end
-    
+
+    def srcversion
+      @srcversion ||= @version
+    end
+
+    def pkgversion
+      @pkgversion ||= @version.tr('-', '_')
+    end
+
     def method_missing name, *args
+      raise "Use srcversion or pkgversion" if name == :version
       result = @metadata[name.to_s]
       while args
         s = args.shift
