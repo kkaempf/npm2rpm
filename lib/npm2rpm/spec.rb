@@ -19,19 +19,22 @@ module Npm2Rpm
       deps.each do |name, version|
         case version
         # "~1.2.3"
-        when /^~?([\d\.]+)(-\d)?([a-z]+)?$/
+        when /^~?(\d+(\.\d+)*)(-\d)?([a-z]+)?$/
           result << "npm(#{name}@#{$1})"
         # "^1.2.3"
-        when /^\^([\d\.]+)(-\d)?([a-z]+)?$/
+        when /^\^(\d+(\.\d+)*)(-\d)?([a-z]+)?$/
           result << "npm(#{name}@#{$1})"
         # "1.2.0-1.2.3"
-        when /^([\d\.]+)-([\d\.]+)$/
+        when /^(\d+(\.\d+)*)-([\d\.]+)$/
           result << "npm(#{name}@#{$2})"
+        # "1.2.x"
+        when /^([^xY]+)(\.[xX])(.*)$/
+          result << "npm(#{name}@#{$1})"
         # "1.2.x", "=0.7.x"
         when /^~?<?>?=?([^xY]+)(\.[xX])(.*)$/
-          result << "npm(#{name}) > #{$1}"
+          result << "npm(#{name}) >= #{$1}"
         # ">= 1.0.0 < 1.2.0"
-        when /^\>=?\s*([\d\.]+)(\s+\<\s*([\d\.]+))?$/
+        when /^\>=?\s*(\d+(\.\d+)+)(\s+\<\s*([\d\.]+))?$/
           result << "npm(#{name}) >= #{$1}"
           result << "npm(#{name}) < #{$3}" if $2
         # "*"
