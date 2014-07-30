@@ -6,6 +6,13 @@ module Npm2Rpm
       @metadata = metadata
       @options = options
     end
+    def message
+      msg = "Initial version #{@metadata.pkgversion}"
+      unless (@metadata.pkgversion == @metadata.srcversion)
+        msg = msg + " (upstream #{@metadata.srcversion})"
+      end
+      msg
+    end
     def write
       # create .changes file as
       # -------------------------------------------------------------------
@@ -15,11 +22,7 @@ module Npm2Rpm
         f.puts "-------------------------------------------------------------------"
         f.puts "#{@options.date} - #{@options.email}@suse.com"
         f.puts
-        if (@metadata.pkgversion == @metadata.srcversion)
-          f.puts "- Initial version #{@metadata.pkgversion}"
-        else
-          f.puts "- Initial version #{@metadata.pkgversion} (upstream #{@metadata.srcversion})"
-        end
+        f.puts "- #{self.message}"
       end
     end
   end

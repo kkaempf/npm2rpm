@@ -28,7 +28,8 @@ end
 Dir.chdir spec.name
 
 spec.write
-Npm2Rpm::Changes.new(spec.name, metadata, options).write
+changes = Npm2Rpm::Changes.new(spec.name, metadata, options)
+changes.write
 Npm2Rpm::Rpmlintrc.new(spec.name, metadata, options).write
 
 Dir.chdir ".."
@@ -36,5 +37,5 @@ Dir.chdir ".."
 Kernel.system "osc add #{spec.name}"
 
 Dir.chdir spec.name
-Kernel.system "osc ci"
+Kernel.system "osc ci -m '#{changes.message}'"
 Dir.chdir ".."
