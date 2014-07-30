@@ -21,6 +21,9 @@ module Npm2Rpm
         # "~1.2.3"
         when /^~?([\d\.]+)(-\d)?([a-z]+)?$/
           result << "npm(#{name}@#{$1})"
+        # "^1.2.3"
+        when /^\^([\d\.]+)(-\d)?([a-z]+)?$/
+          result << "npm(#{name}@#{$1})"
         # "1.2.0-1.2.3"
         when /^([\d\.]+)-([\d\.]+)$/
           result << "npm(#{name}@#{$2})"
