@@ -54,7 +54,6 @@ module Npm2Rpm
         self.package = ARGV.shift
       end
 
-      abort 'Missing package argument' unless @package;
       abort "Extra arguments: #{ARGV}" unless ARGV.empty?;
 
     end

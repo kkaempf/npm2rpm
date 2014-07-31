@@ -124,8 +124,16 @@ module Npm2Rpm
     end
 
     def write
+      require 'uri'
+      require 'pathname'
       url = @metadata.tarball
-      @local_source = Download.new(url).save.filename
+      uri = URI url
+      path = Pathname.new(uri.path).basename
+      if File.readable? path
+        @local_source = path
+      else
+        @local_source = Download.new(url).save.filename
+      end
 
       require 'erb'
 

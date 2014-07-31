@@ -17,25 +17,42 @@ require 'npm2rpm'
 
 options = Npm2Rpm::Options.new
 
+dir_exists = false
+
+unless options.package
+  Dir.new(".").each do |f|
+    if f =~ /^(.*)\.tgz$/
+      split = $1.split "-"
+      v = split.pop
+      n = split.join "-"
+      options.package = "#{n}@#{v}"
+      dir_exists = true
+      break
+    end
+  end
+  abort 'Missing package argument' unless options.package;
+end
+
 metadata = Npm2Rpm::Metadata.new options.package, options.version
 
 spec = Npm2Rpm::Spec.new(metadata)
 
-begin
-  Dir.mkdir spec.name
-rescue Errno::EEXIST
+unless dir_exists
+  begin
+    Dir.mkdir spec.name
+  rescue Errno::EEXIST
+  end
+  Dir.chdir spec.name
 end
-Dir.chdir spec.name
 
 spec.write
 changes = Npm2Rpm::Changes.new(spec.name, metadata, options)
 changes.write
 Npm2Rpm::Rpmlintrc.new(spec.name, metadata, options).write
 
-Dir.chdir ".."
+unless dir_exists
+  Dir.chdir ".."
+  Kernel.system "osc add #{spec.name}"
+end
 
-Kernel.system "osc add #{spec.name}"
-
-Dir.chdir spec.name
-Kernel.system "osc ci -m '#{changes.message}'"
-Dir.chdir ".."
+Kernel.system "osc ci #{spec.name} -m '#{changes.message}'"

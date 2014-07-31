@@ -5,6 +5,7 @@
 #
 
 require 'openssl'
+require 'uri'
 require 'net/https'
 require 'net/http'
 
@@ -14,7 +15,11 @@ module Npm2Rpm
     # get url to local file, return local file name
     def initialize url
       puts "Download #{url.inspect}"
-      @uri = URI url
+      @uri = case url
+             when URI then url
+             else
+               URI url
+             end
       http = Net::HTTP.new(@uri.host, @uri.port)
       if @uri.scheme == "https"
         http.use_ssl = true
