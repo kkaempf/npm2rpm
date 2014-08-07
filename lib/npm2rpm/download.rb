@@ -14,7 +14,7 @@ module Npm2Rpm
     attr_reader :content
     # get url to local file, return local file name
     def initialize url
-      puts "Download #{url.inspect}"
+#      puts "Download #{url.inspect}"
       @uri = case url
              when URI then url
              else
