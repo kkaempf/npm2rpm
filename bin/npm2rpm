@@ -50,9 +50,10 @@ changes = Npm2Rpm::Changes.new(spec.name, metadata, options)
 changes.write
 Npm2Rpm::Rpmlintrc.new(spec.name, metadata, options).write
 
-unless dir_exists
+if dir_exists
+  Kernel.system "osc ci -m 'spec cleanup'"
+else
   Dir.chdir ".."
   Kernel.system "osc add #{spec.name}"
+  Kernel.system "osc ci #{spec.name} -m '#{changes.message}'"
 end
-
-Kernel.system "osc ci #{spec.name} -m '#{changes.message}'"
