@@ -37,7 +37,11 @@ Group:          Development/Libraries
 <% unless spec.homepage.nil? || spec.homepage.empty? -%>
 Url:            <%= spec.homepage %>
 <% end -%>
-Source0:        <%= spec.source %>
+<% sourcenum = 0 -%>
+<% spec.sources.each do |source| -%>
+Source<%= sourcenum -%>:        <%= source %>
+<%   sourcenum += 1 -%>
+<% end -%>
 Summary:        <%= spec.summary %>
 <% unless spec.licenses.empty? -%>
 License:        <%= spec.licenses.join(" and ") %>

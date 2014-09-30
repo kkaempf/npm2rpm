@@ -6,7 +6,7 @@
 
 module Npm2Rpm
   class Spec
-    attr_reader :name
+    attr_reader :name, :sources
     private
     # Convert Hash of npmjs dependencies to Array of RPM requires
     # input:
@@ -53,6 +53,7 @@ module Npm2Rpm
     def initialize metadata
       @metadata = metadata
       @name = "nodejs-#{@metadata.name}_#{@metadata.pkgversion}"
+      @sources = [ @metadata.tarball ]
     end
 
     def npmname
@@ -83,8 +84,8 @@ module Npm2Rpm
       @metadata.npmdata["homepage"] || @metadata.tarball || abort('FIXME: No homepage found')
     end
     
-    def source
-      @metadata.tarball
+    def add_source name
+      @sources << name
     end
     def dir
       # Find out the top-level directory from tarball
