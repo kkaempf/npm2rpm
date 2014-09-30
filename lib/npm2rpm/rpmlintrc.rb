@@ -1,14 +1,16 @@
 module Npm2Rpm
 
   class Rpmlintrc
+    attr_reader :name
+
     def initialize name, metadata, options
-      @name = name
+      @name = "#{name}-rpmlintrc"
       @metadata = metadata
       @options = options
     end
 
     def write
-      File.open("#{@name}-rpmlintrc", "w+") do |f|
+      File.open(@name, "w+") do |f|
         f.puts "addFilter(\"devel-file-in-non-devel-package .*\")"
         f.puts "addFilter(\"file-contains-buildroot .*\")"
         f.puts "addFilter(\"file-contains-date-and-time .*\")"
