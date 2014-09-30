@@ -54,6 +54,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 <% spec.provides.each do |d| -%>
 Provides:       <%= d %>
 <% end -%>
+Provides:       nodejs-%{npmname} = %{version}
 
 BuildRequires:  npm
 BuildRequires:  gcc
