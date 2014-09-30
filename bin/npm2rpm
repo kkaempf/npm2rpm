@@ -45,10 +45,15 @@ unless dir_exists
   Dir.chdir spec.name
 end
 
+rpmlintrc = Npm2Rpm::Rpmlintrc.new(spec.name, metadata, options)
+rpmlintrc.write
+
+spec.add_source rpmlintrc.name
+
 spec.write
+
 changes = Npm2Rpm::Changes.new(spec.name, metadata, options)
 changes.write
-Npm2Rpm::Rpmlintrc.new(spec.name, metadata, options).write
 
 if dir_exists
   Kernel.system "osc ci -m 'spec cleanup'"
