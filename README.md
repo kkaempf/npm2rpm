@@ -1,4 +1,4 @@
-= Creating RPM packages for Nodejs modules
+# Creating RPM packages for Nodejs modules
 
 Picking up where https://github.com/lkundrak/npm2rpm left off, this
 Rubygem creates RPM packages from Nodejs modules.
@@ -10,6 +10,6 @@ It differs from the original implementation as follows
 * Spec generated from template
 * Support for multiple Linux distributions possible
 
-= License
+# License
 
 Ruby
