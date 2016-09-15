@@ -17,9 +17,12 @@ require 'npm2rpm'
 
 options = Npm2Rpm::Options.new
 
+debug = options.debug
+
 dir_exists = false
 
 unless options.package
+  STDERR.puts "No package given, finding ./*.tgz" if debug
   Dir.new(".").each do |f|
     if f =~ /^(.*)\.tgz$/
       split = $1.split "-"
@@ -30,30 +33,43 @@ unless options.package
       break
     end
   end
-  abort 'Missing package argument' unless options.package;
+  options.usage 'Missing package argument' unless options.package;
 end
 
+STDERR.puts "Extracting metadata" if debug
+
 metadata = Npm2Rpm::Metadata.new options.package, options.version
+
+STDERR.puts "Creating spec" if debug
 
 spec = Npm2Rpm::Spec.new(metadata)
 
 unless dir_exists
   begin
+    STDERR.puts "Creating subdir #{spec.name.inspect}" if debug
     Dir.mkdir spec.name
   rescue Errno::EEXIST
   end
   Dir.chdir spec.name
 end
 
+STDERR.puts "Writing rpmlintrc" if debug
+
 rpmlintrc = Npm2Rpm::Rpmlintrc.new(spec.name, metadata, options)
 rpmlintrc.write
 
 spec.add_source rpmlintrc.name
 
+STDERR.puts "Writing .spec" if debug
+
 spec.write
+
+STDERR.puts "Writing .changes" if debug
 
 changes = Npm2Rpm::Changes.new(spec.name, metadata, options)
 changes.write
+
+STDERR.puts "Running osc" if debug
 
 if dir_exists
   Kernel.system "osc ci -m 'spec cleanup'"
