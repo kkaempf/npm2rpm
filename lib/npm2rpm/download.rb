@@ -37,7 +37,7 @@ module Npm2Rpm
       when 404
         abort "No such NPM module #{url}"
       else
-        abort "HTTP error #{response.code.inspect}"
+        abort "HTTP error #{response.code.inspect} accessing #{url}"
       end
       @content = response.body
     end
