@@ -37,6 +37,9 @@ module Npm2Rpm
         when /^\>=?\s*(\d+(\.\d+)+)(\s+\<\s*([\d\.]+))?$/
           result << "npm(#{name}) >= #{$1}"
           result << "npm(#{name}) < #{$3}" if $2
+        # "2 || 3 || 4"
+        when /^(\s*\d+\s*\|\|)+\s*(\d+)$/
+          result << "npm(#{name}@#{$2})"
         # "*"
         # ""
         when "*", ""
